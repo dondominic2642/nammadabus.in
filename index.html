@@ -31,6 +31,9 @@
             --border-color: #e2e8f0;
             --success-green: #22c55e;
             --danger-red: #ef4444;
+            --info-light: #f0fdf4;
+            --info-border: #bbf7d0;
+            --info-text: #166534;
         }
 
         * {
@@ -69,6 +72,29 @@
             margin-top: 4px;
         }
 
+        /* Feature Direction & Status Note Card */
+        .status-note {
+            background-color: var(--info-light);
+            border-left: 4px solid var(--success-green);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--info-border);
+            border-left-width: 4px;
+        }
+        .status-note h3 {
+            margin-bottom: 4px;
+            color: #14532d;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .status-note p {
+            font-size: 0.82rem;
+            color: var(--info-text);
+            margin: 4px 0;
+            line-height: 1.4;
+        }
+
         .search-container {
             background: var(--card-bg);
             padding: 16px;
@@ -92,7 +118,7 @@
             letter-spacing: 0.5px;
         }
 
-        select {
+        select, .text-input {
             width: 100%;
             padding: 12px 16px;
             font-size: 1rem;
@@ -101,15 +127,18 @@
             background-color: #f1f5f9;
             border: 1px solid transparent;
             border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        select {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 16px center;
             background-size: 16px;
-            transition: all 0.2s ease;
         }
 
-        select:focus {
+        select:focus, .text-input:focus {
             outline: none;
             background-color: #fff;
             border-color: var(--primary-color);
@@ -251,6 +280,7 @@
             border: none;
             width: 100%;
             box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+            text-decoration: none;
         }
 
         footer {
@@ -269,19 +299,32 @@
     </header>
 
     <main>
+        <!-- SYSTEM NOTICE / DIRECTIONS NOTE -->
+        <section class="status-note">
+            <h3>ℹ️ System Search Features Information</h3>
+            <p><strong>✅ Active Search Features:</strong> You can query standard scheduled timetables, filter via <b>Dropdown Stations</b>, or keyword search any specific <b>Bus Name, Routes, or English/Malayalam Destinations</b> directly.</p>
+            <p><strong>❌ Inactive Search Features:</strong> <em>Live Target GPS Tracking</em>, <em>Real-Time Traffic Delay Estimations</em>, and <em>Seat Bookings</em> are currently offline/not searchable in this version.</p>
+        </section>
+
         <section class="search-container">
             <div class="form-group">
                 <label for="fromSelect">Starting From (എവിടെ നിന്ന്)</label>
-                <select id="fromSelect">
+                <select id="fromSelect" onchange="filterBuses()">
                     <option value="ALL">-- Show All Stations --</option>
                 </select>
             </div>
             
             <div class="form-group" style="margin-top: 16px;">
                 <label for="toSelect">Going To (എവിടേക്ക്)</label>
-                <select id="toSelect">
+                <select id="toSelect" onchange="filterBuses()">
                     <option value="ALL">-- Show All Destinations --</option>
                 </select>
+            </div>
+
+            <!-- KEYWORD SEARCH FIELD -->
+            <div class="form-group" style="margin-top: 16px;">
+                <label for="keywordSearch">Search Bus Name / Route (കീവേഡ് തിരച്ചിൽ)</label>
+                <input type="text" id="keywordSearch" class="text-input" onkeyup="filterBuses()" placeholder="e.g. Salsabil, KSRTC, Cherupuzha, കണ്ണൂർ...">
             </div>
 
             <div class="live-toggle-container">
@@ -316,7 +359,7 @@
             { from: "Payyavur", to: "Alakode", time: "10:05 AM", name: "THEKKEDATH", via: "ചെമ്പേരി, ആലക്കോട്", fromMl: "പയ്യാവൂർ", toMl: "ആലക്കോട്" },
             { from: "Payyavur", to: "Bandadka", time: "04:20 PM", name: "KSRTC", via: "ആലക്കോട്, ചെറുപുഴ, വെള്ളരിക്കുണ്ട്, രാജപുരം, മാലക്കല്ല് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബന്ധടുക്ക" },
             { from: "Payyavur", to: "Ballal", time: "05:00 PM", name: "KSRTC", via: "ചെമ്പേരി, ആലക്കോട്, വെള്ളരിക്കുണ്ട് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബലാൽ" },
-            { from: "Payyavur", to: "Josegiri", time: "05:05 PM", name: "THEKKEDATH", via: "ശ്രീകണ്ഠാപുരം, ചെമ്പന്തോട്ടി, നടുവിൽ, ആലക്കോട്, ਉദയഗിരി വഴി", fromMl: "പയ്യാവൂർ", toMl: "ജോസ് ഗിരി" },
+            { from: "Payyavur", to: "Josegiri", time: "05:05 PM", name: "THEKKEDATH", via: "ശ്രീകണ്ഠാപുരം, ചെമ്പന്തോട്ടി, നടുവിൽ, ആലക്കോട്, ഉദയഗിരി വഴി", fromMl: "പയ്യാവൂർ", toMl: "ജോസ് ഗിരി" },
             { from: "Payyavur", to: "Cherupuzha", time: "05:10 PM", name: "ANAND", via: "പയ്യാവൂരിൽ നിന്നും സ്റ്റാർട്ട് ചെയ്യുന്നു", fromMl: "പയ്യാവൂർ", toMl: "ചെറുപുഴ" },
 
             // --- CHEMPERI MASTER STATION TIMINGS ---
@@ -335,8 +378,8 @@
             { from: "Chemperi", to: "Kannur", time: "03:45 PM", name: "VISMAYA / വിസ്മയ", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
             { from: "Chemperi", to: "Kannur", time: "04:40 PM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
 
-            // Towards Taliparamba
-            { from: "Chemperi", to: "Taliparamba", time: "05:35 AM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
+            // Towards Taliparamba (FIXED: Added missing toMl keys to prevent 'undefined')
+            { from: "Chemperi", to: "Taliparamba", time: "05:35 AM", name: "JJ / ജাইജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "07:00 AM", name: "KSRTC", via: "Oduvally", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "07:00 AM", name: "KSRTC", via: "Irikkur, Thalassery", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "07:40 AM", name: "NANDANAM / നന്ദനം", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
@@ -351,8 +394,8 @@
             { from: "Chemperi", to: "Taliparamba", time: "11:10 AM", name: "NANDANAM / നന്ദനം", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "11:15 AM", name: "ANN MARY / അന്ന മേരി", via: "Chempanthotti", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "11:40 AM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:00 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:20 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "തളിപ്പറമ്പ്" },
+            { from: "Chemperi", to: "Taliparamba", time: "12:00 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
+            { from: "Chemperi", to: "Taliparamba", time: "12:20 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "12:40 PM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "02:10 PM", name: "MINAKSHI / മീനാക്ഷി", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "02:50 PM", name: "EISWARA / ഐശ്വര്യ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
@@ -439,6 +482,7 @@
         // --- FILTER ENGINE LOGIC ---
         const fromSelect = document.getElementById('fromSelect');
         const toSelect = document.getElementById('toSelect');
+        const keywordSearch = document.getElementById('keywordSearch');
         const busContainer = document.getElementById('busContainer');
         const resultsCount = document.getElementById('resultsCount');
         const nextBusBtn = document.getElementById('nextBusBtn');
@@ -453,15 +497,21 @@
             return (hours * 60) + minutes;
         }
 
+        // FIXED DROPDOWN PARSER: Prevents duplicates and handles fallback safely
         function setupDropdowns() {
             const fromStations = new Set();
             const toDestinations = new Set();
 
             busDatabase.forEach(item => {
-                fromStations.add(`${item.from}|${item.fromMl}`);
-                toDestinations.add(`${item.to}|${item.toMl}`);
+                // Ensure Malayalam strings fallback safely to prevent processing 'undefined' string markers
+                const fMl = item.fromMl || item.from;
+                const tMl = item.toMl || item.to;
+                
+                fromStations.add(`${item.from}|${fMl}`);
+                toDestinations.add(`${item.to}|${tMl}`);
             });
 
+            // Sort and build structured clean element nodes safely
             Array.from(fromStations).sort().forEach(station => {
                 const [en, ml] = station.split('|');
                 const opt = document.createElement('option');
@@ -494,6 +544,7 @@
         function filterBuses() {
             const selectedFrom = fromSelect.value;
             const selectedTo = toSelect.value;
+            const textQuery = keywordSearch.value.trim().toLowerCase();
             
             const now = new Date();
             const currentMinutes = (now.getHours() * 60) + now.getMinutes();
@@ -508,7 +559,17 @@
                     matchTime = busMinutes >= currentMinutes;
                 }
 
-                return matchFrom && matchTo && matchTime;
+                let matchText = true;
+                if (textQuery !== "") {
+                    matchText = bus.name.toLowerCase().includes(textQuery) ||
+                                bus.via.toLowerCase().includes(textQuery) ||
+                                bus.from.toLowerCase().includes(textQuery) ||
+                                bus.to.toLowerCase().includes(textQuery) ||
+                                (bus.fromMl && bus.fromMl.includes(textQuery)) ||
+                                (bus.toMl && bus.toMl.includes(textQuery));
+                }
+
+                return matchFrom && matchTo && matchTime && matchText;
             });
 
             resultsCount.textContent = `${filtered.length} Bus services found running`;
@@ -523,54 +584,39 @@
             }
 
             filtered.forEach(bus => {
-                const busMinutes = getBusMinutes(bus.time);
-                // ചെക്ക് ചെയ്യുന്നു: ബസിന്റെ സമയം ആയോ അല്ലെങ്കിൽ സമയം കഴിഞ്ഞോ എന്ന്
-                const isTimeReached = currentMinutes >= busMinutes;
-
-                // ഗൂഗിൾ മാപ്പ് യുആർഎൽ - നിലവിലെ ലൊക്കേഷൻ (My Location) ഓൺ ആക്കി ഡെസ്റ്റിനേഷനിലേക്ക് ലിങ്ക് ചെയ്യുന്നു
-                const mapsUrl = `https://www.google.com/maps/dir/My+Location/${encodeURIComponent(bus.to + ', Kerala')}/`;
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bus.to + ', Kerala')}`;
+                const displayFromMl = bus.fromMl || bus.from;
+                const displayToMl = bus.toMl || bus.to;
 
                 const card = document.createElement('div');
-                card.className = 'bus-card';
-                // കാർഡിൽ എവിടെ ക്ലിക്ക് ചെയ്താലും മാപ്പ് ഓപ്പൺ ചെയ്യും
-                card.setAttribute('onclick', `window.open('${mapsUrl}', '_blank')`);
-                
-                let actionButtonHtml = '';
-                if (isTimeReached) {
-                    actionButtonHtml = `
-                        <button class="map-action-btn">
-                            📍 Track Live Route (മാപ്പ് കാണുക)
-                        </button>
-                    `;
-                }
-
+                card.className = "bus-card";
                 card.innerHTML = `
                     <div class="card-header">
                         <div class="bus-time">${bus.time}</div>
-                        <div class="bus-name">${bus.name}</div>
+                        <div class="bus-name">🚌 ${bus.name}</div>
                     </div>
                     <div class="route-info">
-                        <span>${bus.from}</span>
-                        <span style="color: var(--text-muted);">➔</span>
-                        <span>${bus.to}</span>
+                        <span>${bus.from}</span> ➡️ <span>${bus.to}</span>
                     </div>
                     <div class="via-details">
-                        <span class="malayalam-text">വഴി: ${bus.via}</span>
+                        <b>Via:</b> ${bus.via}
                     </div>
-                    ${actionButtonHtml}
+                    <div class="malayalam-text">
+                        റൂട്ട്: ${displayFromMl} ➔ ${displayToMl}
+                    </div>
+                    <a href="${mapsUrl}" target="_blank" class="map-action-btn">
+                        📍 View Destination Route Map
+                    </a>
                 `;
                 busContainer.appendChild(card);
             });
         }
 
-        fromSelect.addEventListener('change', filterBuses);
-        toSelect.addEventListener('change', filterBuses);
-
-        setupDropdowns();
-        filterBuses();
-        
-        // ഓരോ മിനിറ്റിലും ടൈം റീഫ്രഷ് ചെയ്യാൻ വേണ്ടി (ബട്ടൺ തനിയെ വരാൻ)
-        setInterval(filterBuses, 60000);
+        // Run dropdown parser and immediate data grid render on boot
+        window.onload = function() {
+            setupDropdowns();
+            filterBuses();
+        };
     </script>
 </body>
 </html>
