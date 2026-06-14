@@ -1,565 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PHQ8GQDMMMQ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-PHQ8GQDMMMQ');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nammadabus.in - Live Bus Timetable</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Malayalam:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <title>Bus Timetable</title>
     <style>
         :root {
-            --primary-color: #0284c7;
-            --primary-dark: #0369a1;
+            --primary-color: #2563eb;
             --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent-orange: #f97316;
+            --text-color: #1e293b;
             --border-color: #e2e8f0;
-            --success-green: #22c55e;
-            --danger-red: #ef4444;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-main);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        .route-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        .route-title {
+            font-size: 1.4rem;
+            color: #0f172a;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td {
             padding: 12px;
-            line-height: 1.5;
+            border-bottom: 1px solid var(--border-color);
         }
-
-        header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-            color: white;
-            padding: 20px 16px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
-        }
-
-        header h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 4px;
-        }
-
-        .search-container {
-            background: var(--card-bg);
-            padding: 16px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            border: 1px solid var(--border-color);
-            margin-bottom: 16px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 1rem;
-            font-family: inherit;
-            color: var(--text-main);
+        th {
             background-color: #f1f5f9;
-            border: 1px solid transparent;
-            border-radius: 12px;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 16px;
-            transition: all 0.2s ease;
-        }
-
-        select:focus {
-            outline: none;
-            background-color: #fff;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
-        }
-
-        .live-toggle-container {
-            margin-top: 16px;
-        }
-
-        .next-bus-btn {
-            width: 100%;
-            background-color: var(--success-green);
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2);
-        }
-
-        .next-bus-btn.active {
-            background-color: var(--danger-red);
-            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
-        }
-
-        .results-count {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            padding-left: 4px;
-        }
-
-        .bus-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .bus-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bus-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--primary-color);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .bus-time {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent-orange);
-        }
-
-        .bus-name {
-            font-size: 0.9rem;
             font-weight: 600;
-            background: #e0f2fe;
-            color: var(--primary-dark);
-            padding: 6px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            border: 1px solid #bae6fd;
-            transition: all 0.2s ease;
-            cursor: pointer;
         }
-
-        .bus-name:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+        tr:hover {
+            background-color: #f8fafc;
         }
-
-        .route-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 1.05rem;
+        .malayalam {
+            font-size: 0.95rem;
+            color: #475569;
         }
-
-        .via-details {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            background: #fafafa;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px dashed #e2e8f0;
-        }
-
-        .malayalam-text {
-            font-family: 'Noto Serif Malayalam', serif;
-            font-size: 0.9rem;
-            color: #334155;
-        }
-
-        footer {
-            text-align: center;
-            padding: 24px 10px;
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
             font-size: 0.8rem;
-            color: var(--text-muted);
+            font-weight: bold;
         }
+        .ksrtc { background-color: #fee2e2; color: #991b1b; }
+        .private { background-color: #dbeafe; color: #1e40af; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Nammadabus.in</h1>
-        <p>Comprehensive Master Timetable Portal</p>
-    </header>
+<div class="container">
+    <h1>Bus Timetable & Schedule</h1>
 
-    <main>
-        <section class="search-container">
-            <div class="form-group">
-                <label for="fromSelect">Starting From (എവിടെ നിന്ന്)</label>
-                <select id="fromSelect">
-                    <option value="ALL">-- Show All Stations --</option>
-                </select>
-            </div>
-            
-            <div class="form-group" style="margin-top: 16px;">
-                <label for="toSelect">Going To (എവിടേക്ക്)</label>
-                <select id="toSelect">
-                    <option value="ALL">-- Show All Destinations --</option>
-                </select>
-            </div>
+    <!-- KUTHUPARAMBA / KANNUR TIMINGS -->
+    <div class="route-section">
+        <h2 class="route-title">Kuthuparamba / Kannur Timings</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>06:00 AM</strong></td>
+                        <td>Kuthuparamba <span class="malayalam">(കൂത്തുപറമ്പ്)</span></td>
+                        <td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td>
+                        <td><span class="badge private">TALENT</span></td>
+                        <td>Direct Limited Stop</td>
+                    </tr>
+                    <tr>
+                        <td><strong>06:20 AM</strong></td>
+                        <td>Kuthuparamba <span class="malayalam">(കൂത്തുപറമ്പ്)</span></td>
+                        <td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td>
+                        <td><span class="badge private">MM4</span></td>
+                        <td>Payyannur Route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>07:00 AM</strong></td>
+                        <td>Kuthuparamba <span class="malayalam">(കൂത്തുപറമ്പ്)</span></td>
+                        <td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td>
+                        <td><span class="badge private">MADHAVI</span></td>
+                        <td>Payyannur Route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>07:53 AM</strong></td>
+                        <td>Kuthuparamba <span class="malayalam">(കൂത്തുപറമ്പ്)</span></td>
+                        <td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td>
+                        <td><span class="badge private">PALAKKADANS</span></td>
+                        <td>Payyannur Route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>08:50 AM</strong></td>
+                        <td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td>
+                        <td>Kuthuparamba <span class="malayalam">(കൂത്തുപറമ്പ്)</span></td>
+                        <td><span class="badge private">PRATAP</span></td>
+                        <td>Mananthavady Route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>03:30 PM</strong></td>
+                        <td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td>
+                        <td>Kuthuparamba <span class="malayalam">(കൂത്തുപറമ്പ്)</span></td>
+                        <td><span class="badge private">PALAKKADANS</span></td>
+                        <td>Kottiyoor Route</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-            <div class="live-toggle-container">
-                <button id="nextBusBtn" class="next-bus-btn" onclick="toggleNextBusesFilter()">
-                    <span>⏱️ Ini Ulla Busukal (Next Buses Only)</span>
-                </button>
-            </div>
-        </section>
+    <!-- PAYYAVUR / ALAKODE / CHERUPUZHA LIVE LINE TIMINGS -->
+    <div class="route-section">
+        <h2 class="route-title">Payyavur / Alakode / Cherupuzha Live Line Timings</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>08:45 AM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Ballal <span class="malayalam">(ബലാൽ)</span></td>
+                        <td><span class="badge ksrtc">KSRTC FP</span></td>
+                        <td class="malayalam">ചെമ്പേരി, ആലക്കോട്, വെള്ളരിക്കുണ്ട് വഴി</td>
+                    </tr>
+                    <tr>
+                        <td><strong>09:15 AM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Cherupuzha <span class="malayalam">(ചെറുപുഴ)</span></td>
+                        <td><span class="badge private">BIGSHOW</span></td>
+                        <td class="malayalam">ചെമ്പേരി, ആലക്കോട് വഴി</td>
+                    </tr>
+                    <tr>
+                        <td><strong>09:40 AM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Mangalapuram <span class="malayalam">(മംഗലാപുരം)</span></td>
+                        <td><span class="badge ksrtc">KSRTC</span></td>
+                        <td class="malayalam">ചെമ്പേരി, ആലക്കോട്, ഓടയഞ്ചാൽ, കാഞ്ഞങ്ങാട്, കാസർഗോഡ് വഴി</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10:05 AM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td>
+                        <td><span class="badge private">THEKKEDATH</span></td>
+                        <td class="malayalam">ചെമ്പേരി, ആലക്കോട്</td>
+                    </tr>
+                    <tr>
+                        <td><strong>04:20 PM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Bandadka <span class="malayalam">(ബന്ധടുക്ക)</span></td>
+                        <td><span class="badge ksrtc">KSRTC</span></td>
+                        <td class="malayalam">ആലക്കോട്, ചെറുപുഴ, വെള്ളരിക്കുണ്ട്, രാജപുരം, മാലക്കല്ല് വഴി</td>
+                    </tr>
+                    <tr>
+                        <td><strong>05:00 PM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Ballal <span class="malayalam">(ബലാൽ)</span></td>
+                        <td><span class="badge ksrtc">KSRTC</span></td>
+                        <td class="malayalam">ചെമ്പേരി, ആലക്കോട്, വെള്ളരിക്കുണ്ട് വഴി</td>
+                    </tr>
+                    <tr>
+                        <td><strong>05:05 PM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Josegiri <span class="malayalam">(ജോസ് ഗിരി)</span></td>
+                        <td><span class="badge private">THEKKEDATH</span></td>
+                        <td class="malayalam">ശ്രീകണ്ഠാപുരം, ചെമ്പന്തോട്ടി, നടുവിൽ, ആലക്കോട്, ഉദയഗിരി വഴി</td>
+                    </tr>
+                    <tr>
+                        <td><strong>05:10 PM</strong></td>
+                        <td>Payyavur <span class="malayalam">(പയ്യാവൂർ)</span></td>
+                        <td>Cherupuzha <span class="malayalam">(ചെറുപുഴ)</span></td>
+                        <td><span class="badge private">ANAND</span></td>
+                        <td class="malayalam">പയ്യാവൂരിൽ നിന്നും സ്റ്റാർട്ട് ചെയ്യുന്നു</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        <div class="results-count" id="resultsCount">Loading schedules...</div>
-        <section class="bus-list" id="busContainer"></section>
-    </main>
+    <!-- CHEMPERI MASTER STATION TIMINGS -->
+    <div class="route-section">
+        <h2 class="route-title">Chemperi Master Station Timings</h2>
+        
+        <h3>Towards Kannur (കണ്ണൂർ ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>06:35 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">SAGAR / സാഗര</span></td><td>Sreekandapuram, Kannur</td></tr>
+                    <tr><td><strong>07:10 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">FAMILY / ഫാമിലി</span></td><td>Sreekandapuram, Kannur</td></tr>
+                    <tr><td><strong>07:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">JANASHATHABDI / ജനശതാബ്ദി</span></td><td>Direct Kannur Route</td></tr>
+                    <tr><td><strong>08:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">KRITHIKA / കൃതിക</span></td><td>Direct Kannur Route</td></tr>
+                    <tr><td><strong>09:45 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">VISMAYA / വിസ്മയ</span></td><td>Direct Kannur Route</td></tr>
+                    <tr><td><strong>10:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">MINAKSHI / മീനാക്ഷി</span></td><td>Direct Kannur Route</td></tr>
+                    <tr><td><strong>10:10 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">SHREYAS / ശ്രേയസ്</span></td><td>Irikkur, Kannur</td></tr>
+                    <tr><td><strong>12:45 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">FAMILY / ഫാമിലി</span></td><td>Sreekandapuram, Kannur</td></tr>
+                    <tr><td><strong>01:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">JANASHATHABDI / ജനശതാബ്ദി</span></td><td>Direct Kannur Route</td></tr>
+                    <tr><td><strong>02:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">KRITHIKA / കൃതിക</span></td><td>Eruvatty, Kannur</td></tr>
+                    <tr><td><strong>03:20 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">KUNNATH / കുന്നത്ത്</span></td><td>Sreekandapuram, Kannur</td></tr>
+                    <tr><td><strong>03:45 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">VISMAYA / വിസ്മയ</span></td><td>Direct Kannur Route</td></tr>
+                    <tr><td><strong>04:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kannur <span class="malayalam">(കണ്ണൂർ)</span></td><td><span class="badge private">SHREYAS / ശ്രേയസ്</span></td><td>Irikkur, Kannur</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-    <footer>
-        <p>© 2026 Nammadabus.in • Accurate Regional Data Grid</p>
-    </footer>
-    <script>
-        const busDatabase = [
-            // --- KUTHUPARAMBA / KANNUR TIMINGS ---
-            { from: "Kuthuparamba", to: "Kannur", time: "06:00 AM", name: "TALENT", via: "Direct Limited Stop", fromMl: "കൂത്തുപറമ്പ്", toMl: "കണ്ണൂർ" },
-            { from: "Kuthuparamba", to: "Kannur", time: "06:20 AM", name: "MM4", via: "Payyannur Route", fromMl: "കൂത്തുപറമ്പ്", toMl: "കണ്ണൂർ" },
-            { from: "Kuthuparamba", to: "Kannur", time: "07:00 AM", name: "MADHAVI", via: "Payyannur Route", fromMl: "കൂത്തുപറമ്പ്", toMl: "കണ്ണൂർ" },
-            { from: "Kuthuparamba", to: "Kannur", time: "07:53 AM", name: "PALAKKADANS", via: "Payyannur Route", fromMl: "കൂത്തുപറമ്പ്", toMl: "കണ്ണൂർ" },
-            { from: "Kannur", to: "Kuthuparamba", time: "08:50 AM", name: "PRATAP", via: "Mananthavady Route", fromMl: "കണ്ണൂർ", toMl: "കൂത്തുപറമ്പ്" },
-            { from: "Kannur", to: "Kuthuparamba", time: "03:30 PM", name: "PALAKKADANS", via: "Kottiyoor Route", fromMl: "കണ്ണൂർ", toMl: "കൂത്തുപറമ്പ്" },
+        <h3>Towards Taliparamba (തളിപ്പറമ്പ് ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>05:35 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">JJ / ജൈജൈ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>07:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Oduvally</td></tr>
+                    <tr><td><strong>07:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Irikkur, Thalassery</td></tr>
+                    <tr><td><strong>07:40 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">NANDANAM / നന്ദനം</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>08:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">ANN MARY / അന്ന മേരി</span></td><td>Chempanthotti</td></tr>
+                    <tr><td><strong>08:20 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">KUNNATH / കുന്നത്ത്</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>08:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Eruvatty വഴി</td></tr>
+                    <tr><td><strong>08:45 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">NIRANJANA / നിരാഞ്ജന</span></td><td>Chempanthotti, Sreekandapuram</td></tr>
+                    <tr><td><strong>08:50 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>09:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">JJ / ജൈജൈ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>10:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">PALAKKADANS / പാലക്കാടൻസ്</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>10:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">ST JUDE / സെന്റ് ജൂഡ്</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>11:10 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">NANDANAM / നന്ദനം</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>11:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">ANN MARY / അന്ന മേരി</span></td><td>Chempanthotti</td></tr>
+                    <tr><td><strong>11:40 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">KUNNATH / കുന്നത്ത്</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>12:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>12:20 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>12:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">JJ / ജൈജൈ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>02:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">MINAKSHI / മീനാക്ഷി</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>02:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">EISWARA / ഐശ്വര്യ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>03:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SAGAR / സാഗര</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>04:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Oduvally</td></tr>
+                    <tr><td><strong>04:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">JJ / ജൈജൈ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>04:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>05:05 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">MANGALATHIL / മംഗലാട്ടിൽ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>05:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">NIRANJANA / നിരാഞ്ജന</span></td><td>Chempanthotti</td></tr>
+                    <tr><td><strong>05:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">PILAKUNNUMMAL / പിലാക്കുന്നമ്മൽ</span></td><td>Sreekandapuram, Malappattam</td></tr>
+                    <tr><td><strong>05:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Ernakulam - Chala</td></tr>
+                    <tr><td><strong>06:20 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Sreekandapuram</td></tr>
+                    <tr><td><strong>06:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Taliparamba <span class="malayalam">(തളിപ്പറമ്പ്)</span></td><td><span class="badge private">EISWARA / ഐശ്വര്യ</span></td><td>Sreekandapuram</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // --- PAYYAVUR / ALAKODE / CHERUPUZHA LIVE LINE TIMINGS ---
-            { from: "Payyavur", to: "Ballal", time: "08:45 AM", name: "KSRTC FP", via: "ചെമ്പേരി, ആലക്കോട്, വെള്ളരിക്കുണ്ട് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബലാൽ" },
-            { from: "Payyavur", to: "Cherupuzha", time: "09:15 AM", name: "BIGSHOW", via: "ചെമ്പേരി, ആലക്കോട് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ചെറുപുഴ" },
-            { from: "Payyavur", to: "Mangalapuram", time: "09:40 AM", name: "KSRTC", via: "ചെമ്പേരി, ആലക്കോട്, ഓടയഞ്ചാൽ, കാഞ്ഞങ്ങാട്, കാസർഗോഡ് വഴി", fromMl: "പയ്യാവൂർ", toMl: "മംഗലാപുരം" },
-            { from: "Payyavur", to: "Alakode", time: "10:05 AM", name: "THEKKEDATH", via: "ചെമ്പേരി, ആലക്കോട്", fromMl: "പയ്യാവൂർ", toMl: "ആലക്കോട്" },
-            { from: "Payyavur", to: "Bandadka", time: "04:20 PM", name: "KSRTC", via: "ആലക്കോട്, ചെറുപുഴ, വെള്ളരിക്കുണ്ട്, രാജപുരം, മാലക്കല്ല് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബന്ധടുക്ക" },
-            { from: "Payyavur", to: "Ballal", time: "05:00 PM", name: "KSRTC", via: "ചെമ്പേരി, ആലക്കോട്, വെള്ളരിക്കുണ്ട് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബലാൽ" },
-            { from: "Payyavur", to: "Josegiri", time: "05:05 PM", name: "THEKKEDATH", via: "ശ്രീകണ്ഠാപുരം, ചെമ്പന്തോട്ടി, നടുവിൽ, ആലക്കോട്, ਉਦയഗിരി വഴി", fromMl: "പയ്യാവൂർ", toMl: "ജോസ് ഗിരി" },
-            { from: "Payyavur", to: "Cherupuzha", time: "05:10 PM", name: "ANAND", via: "പയ്യാവൂരിൽ നിന്നും സ്റ്റാർട്ട് ചെയ്യുന്നു", fromMl: "പയ്യാവൂർ", toMl: "ചെറുപുഴ" },
+        <h3>Towards Iritty (ഇриട്ടി ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>05:25 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>05:50 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Direct</td></tr>
+                    <tr><td><strong>06:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>07:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">SHALAKSHMI / ശാലക്ഷ്മി</span></td><td>Direct</td></tr>
+                    <tr><td><strong>07:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady / വീർപ്പാട്</td></tr>
+                    <tr><td><strong>08:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>08:25 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>09:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">ST MARYS / സെന്റ് മേരീസ്</span></td><td>Kottiyoor Route</td></tr>
+                    <tr><td><strong>09:45 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>10:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">SHALAKSHMI / ശാലക്ഷ്മി</span></td><td>Direct</td></tr>
+                    <tr><td><strong>10:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">JACOBS / ജേക്കബ്</span></td><td>Direct</td></tr>
+                    <tr><td><strong>10:50 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Keralam / Direct</td></tr>
+                    <tr><td><strong>11:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">SHEEJA / ഷീജ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>11:15 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">AJSAL / അജ്സൽ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>11:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>11:35 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">NIRMALAYAM / നിർമാല്യം</span></td><td>Direct</td></tr>
+                    <tr><td><strong>12:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">IPC / ഐ പി സി</span></td><td>Kizhupally വഴി</td></tr>
+                    <tr><td><strong>12:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Direct</td></tr>
+                    <tr><td><strong>12:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>12:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">CHAITHRAM / ചൈത്രം</span></td><td>Direct</td></tr>
+                    <tr><td><strong>01:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">ST MARYS / സെന്റ് മേരീസ്</span></td><td>Direct</td></tr>
+                    <tr><td><strong>01:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>02:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">BIGSHOW / ബിഗ്ഷോ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>03:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mananthavady Route</td></tr>
+                    <tr><td><strong>03:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">PROVIDENCE / പ്രൊവിഡൻസ്</span></td><td>Thalassery Route</td></tr>
+                    <tr><td><strong>03:45 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">SANIYA / സാനിയ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>04:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">HOLY ANGEL / Holi Angel</span></td><td>Kizhupally വഴി</td></tr>
+                    <tr><td><strong>04:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">AVE MARIA / ആവേ മരിയ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>04:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">ANAND / ആനന്ദ്</span></td><td>Payyavur Route</td></tr>
+                    <tr><td><strong>05:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">ST JUDE / സെന്റ് ജൂഡ്</span></td><td>Direct</td></tr>
+                    <tr><td><strong>05:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">KERALA / കേരള</span></td><td>Kottiyoor Route</td></tr>
+                    <tr><td><strong>05:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Vaniyappara</td></tr>
+                    <tr><td><strong>06:05 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Vaniyappara</td></tr>
+                    <tr><td><strong>06:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">CHAITHRAM / ചൈത്രം</span></td><td>Direct</td></tr>
+                    <tr><td><strong>07:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Vaniyappara</td></tr>
+                    <tr><td><strong>08:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge private">MADHAVI / മാധവി</span></td><td>Ernakulam Route</td></tr>
+                    <tr><td><strong>09:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Iritty <span class="malayalam">(ഇരിട്ടി)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Vaniyappara</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // --- CHEMPERI MASTER STATION TIMINGS ---
-            // Towards Kannur (കണ്ണൂർ ഭാഗത്തേക്ക് പോകുന്നവ കൃത്യമായി വേർതിരിച്ചു)
-            { from: "Chemperi", to: "Kannur", time: "06:35 AM", name: "SAGAR / സാഗര", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "07:10 AM", name: "FAMILY / ഫാമിലി", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "07:30 AM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "08:00 AM", name: "KRITHIKA / കൃതിക", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "09:45 AM", name: "VISMAYA / വിസ്മയ", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "10:00 AM", name: "MINAKSHI / മീനാക്ഷി", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "10:10 AM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "12:45 PM", name: "FAMILY / ഫാമിലി", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "01:10 PM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "02:00 PM", name: "KRITHIKA / കൃതിക", via: "Eruvatty, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "03:20 PM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "03:45 PM", name: "VISMAYA / വിസ്മയ", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Kannur", time: "04:40 PM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
-            { from: "Chemperi", to: "Taliparamba", time: "05:35 AM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "07:00 AM", name: "KSRTC", via: "Oduvally", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "07:00 AM", name: "KSRTC", via: "Irikkur, Thalassery", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "07:40 AM", name: "NANDANAM / നന്ദനം", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "08:00 AM", name: "ANN MARY / അന്ന മേരി", via: "Chempanthotti", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "08:20 AM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "08:30 AM", name: "SALSABIL / സൽസബീൽ", via: "Eruvatty വഴി", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "08:45 AM", name: "NIRANJANA / നിരാഞ്ജന", via: "Chempanthotti, Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "08:50 AM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "09:15 AM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "10:15 AM", name: "PALAKKADANS / പാലക്കാടൻസ്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "10:30 AM", name: "ST JUDE / സെന്റ് ജൂഡ്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "11:10 AM", name: "NANDANAM / നന്ദനം", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "11:15 AM", name: "ANN MARY / അന്ന മേരി", via: "Chempanthotti", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "11:40 AM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:00 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:20 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:40 PM", name: "JJ / ജൈజൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "02:10 PM", name: "MINAKSHI / മീനാക്ഷി", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "02:50 PM", name: "EISWARA / ഐശ്വര്യ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "03:15 PM", name: "SAGAR / സാഗര", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "04:00 PM", name: "KSRTC", via: "Oduvally", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "04:15 PM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "04:30 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "05:05 PM", name: "MANGALATHIL / മംഗലാട്ടിൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "05:10 PM", name: "NIRANJANA / നിരാഞ്ജന", via: "Chempanthotti", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "05:15 PM", name: "PILAKUNNUMMAL / പിലാക്കുന്നമ്മൽ", via: "Sreekandapuram, Malappattam", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "05:50 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Ernakulam - Chala", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "06:20 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "06:40 PM", name: "EISWARA / ഐശ്വര്യ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
+        <h3>Towards Alakode (ആലക്കോട് ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>04:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Payyannur Route</td></tr>
+                    <tr><td><strong>04:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Payyannur Route</td></tr>
+                    <tr><td><strong>06:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Kanhangad Route</td></tr>
+                    <tr><td><strong>06:50 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mangalapuram Route</td></tr>
+                    <tr><td><strong>07:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Kanhangad Route</td></tr>
+                    <tr><td><strong>08:05 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">IPC / ഐ പി സി</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>08:20 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">HOLY ANGEL / Holi Angel</span></td><td>Kudiyanmala, Alakode</td></tr>
+                    <tr><td><strong>09:10 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">THEKKEDATH / തെക്കേടത്ത്</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>09:44 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Kanhangad Route</td></tr>
+                    <tr><td><strong>10:10 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">BIGSHOW / ബിഗ്ഷോ</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>10:25 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Mangalapuram Route</td></tr>
+                    <tr><td><strong>11:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Kanhangad Route</td></tr>
+                    <tr><td><strong>11:45 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>12:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">ANAND / ആനന്ദ്</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>01:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">JACOBS / ജേക്കബ്</span></td><td>Cherupuzha, Vellarikundu</td></tr>
+                    <tr><td><strong>01:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">ST MARYS / സെന്റ് മേരീസ്</span></td><td>Panathur Route</td></tr>
+                    <tr><td><strong>02:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Kanhangad Route</td></tr>
+                    <tr><td><strong>02:55 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">ST MARYS / സെന്റ് മേരീസ്</span></td><td>Vellarikundu Route</td></tr>
+                    <tr><td><strong>03:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">AJSAL / അജ്സൽ</span></td><td>Paadichal Route</td></tr>
+                    <tr><td><strong>03:20 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Rajagiri Route</td></tr>
+                    <tr><td><strong>03:45 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Panathur Route</td></tr>
+                    <tr><td><strong>04:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">KAVALAM / കാവാലം</span></td><td>Panathur Route</td></tr>
+                    <tr><td><strong>04:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>05:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">ANAND / ആനന്ദ്</span></td><td>Cherupuzha Route</td></tr>
+                    <tr><td><strong>05:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Vellarikundu Route</td></tr>
+                    <tr><td><strong>06:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge private">HOLY ANGEL /  ഹോളി എയ്ഞ്ചൽ</span></td><td>Alakode Route</td></tr>
+                    <tr><td><strong>06:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Alakode <span class="malayalam">(ആലക്കോട്)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Kanhangad Route</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // Towards Iritty (ഇരിട്ടി ഭാഗത്തേക്ക്)
-            { from: "Chemperi", to: "Iritty", time: "05:25 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "05:50 AM", name: "KSRTC", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "06:30 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "07:15 AM", name: "SHALAKSHMI / ശാലക്ഷ്മി", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "07:30 AM", name: "KSRTC", via: "Mananthavady / വീർപ്പാട്", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "08:00 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "08:25 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "09:15 AM", name: "ST MARYS / സെന്റ് മേരീസ്", via: "Kottiyoor Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "09:45 AM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "10:15 AM", name: "SHALAKSHMI / ശാലക്ഷ്മി", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "10:30 AM", name: "JACOBS / ജേക്കബ്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "10:50 AM", name: "KSRTC", via: "Keralam / Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "11:00 AM", name: "SHEEJA / ഷീജ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "11:15 AM", name: "AJSAL / അജ്സൽ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "11:30 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "11:35 AM", name: "NIRMALAYAM / നിർമാല്യം", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "12:15 PM", name: "IPC / ഐ പി സി", via: "Kizhupally വഴി", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "12:30 PM", name: "KSRTC", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "12:40 PM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "12:50 PM", name: "CHAITHRAM / ചൈത്രം", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "01:00 PM", name: "ST MARYS / സെന്റ് മേരീസ്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "01:50 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "02:15 PM", name: "BIGSHOW / ബിഗ്ഷോ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "03:00 PM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "03:30 PM", name: "PROVIDENCE / പ്രൊവിഡൻസ്", via: "Thalassery Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "03:45 PM", name: "SANIYA / സാനിയ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "04:10 PM", name: "HOLY ANGEL / Holi Angel", via: "Kizhupally വഴി", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "04:30 PM", name: "AVE MARIA / ആവേ മരിയ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "04:40 PM", name: "ANAND / ആനന്ദ്", via: "Payyavur Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "05:00 PM", name: "ST JUDE / സെന്റ് ജൂഡ്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "05:15 PM", name: "KERALA / കേരള", via: "Kottiyoor Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "05:40 PM", name: "KSRTC", via: "Vaniyappara", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "06:05 PM", name: "KSRTC", via: "Vaniyappara", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "06:30 PM", name: "CHAITHRAM / ചൈത്രം", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "07:50 PM", name: "KSRTC", via: "Vaniyappara", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "08:10 PM", name: "MADHAVI / മാധവി", via: "Ernakulam Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "09:00 PM", name: "KSRTC", via: "Vaniyappara", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
+        <h3>Towards Kudiyanmala (കൂടിയാൻമല ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>08:20 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">HOLY ANGEL / Holi Angel</span></td><td>Alakode Route</td></tr>
+                    <tr><td><strong>08:50 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">KERALA / കേരള</span></td><td>Direct</td></tr>
+                    <tr><td><strong>11:05 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">CHAITHRAM / ചൈത്രം</span></td><td>Direct</td></tr>
+                    <tr><td><strong>12:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>02:15 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">SONIYA / സോണിയ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>03:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">KERALA / കേരള</span></td><td>Direct</td></tr>
+                    <tr><td><strong>05:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">CHAITHRAM / ചൈത്രം</span></td><td>Direct</td></tr>
+                    <tr><td><strong>06:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Kanakkayam, Valiya Arikkamala</td></tr>
+                    <tr><td><strong>06:40 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Kanakkayam Route</td></tr>
+                    <tr><td><strong>07:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Vairathode</td></tr>
+                    <tr><td><strong>08:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Kudiyanmala <span class="malayalam">(കൂടിയാൻമല)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Pulikurumba</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // Towards Alakode (ആലക്കോട് ഭാഗത്തേക്ക്)
-            { from: "Chemperi", to: "Alakode", time: "04:00 AM", name: "KSRTC", via: "Payyannur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "04:30 AM", name: "KSRTC", via: "Payyannur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "06:30 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "06:50 AM", name: "KSRTC", via: "Mangalapuram Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "07:30 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "08:05 AM", name: "IPC / ഐ പി സി", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "08:20 AM", name: "HOLY ANGEL / Holi Angel", via: "Kudiyanmala, Alakode", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "09:10 AM", name: "THEKKEDATH / തെക്കേടത്ത്", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "09:44 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "10:10 AM", name: "BIGSHOW / ബിഗ്ഷോ", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "10:25 AM", name: "KSRTC", via: "Mangalapuram Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "11:00 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "11:45 AM", name: "KSRTC", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "12:40 PM", name: "ANAND / ആനന്ദ്", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "01:15 PM", name: "JACOBS / ജേക്കബ്", via: "Cherupuzha, Vellarikundu", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "01:40 PM", name: "ST MARYS / സെന്റ് മേരീസ്", via: "Panathur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "02:15 PM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "02:55 PM", name: "ST MARYS / സെന്റ് മേരീസ്", via: "Vellarikundu Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "03:15 PM", name: "AJSAL / അജ്സൽ", via: "Paadichal Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "03:20 PM", name: "KSRTC", via: "Rajagiri Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "03:45 PM", name: "KSRTC", via: "Panathur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "04:10 PM", name: "KAVALAM / കാവാലം", via: "Panathur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "04:40 PM", name: "KSRTC", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "05:15 PM", name: "ANAND / ആനന്ദ്", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "05:50 PM", name: "KSRTC", via: "Vellarikundu Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "06:30 PM", name: "HOLY ANGEL /  ഹോളി എയ്ഞ്ചൽ", via: "Alakode Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "06:40 PM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "08:20 AM", name: "HOLY ANGEL / Holi Angel", via: "Alakode Route", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "08:50 AM", name: "KERALA / കേരള", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "11:05 AM", name: "CHAITHRAM / ചൈത്രം", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "12:30 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "02:15 PM", name: "SONIYA / സോണിയ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "03:50 PM", name: "KERALA / കേരള", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "05:10 PM", name: "CHAITHRAM / ചൈത്രം", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "06:00 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Kanakkayam, Valiya Arikkamala", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "06:40 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Kanakkayam Route", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "07:10 PM", name: "KSRTC", via: "Vairathode", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "08:30 PM", name: "KSRTC", via: "Pulikurumba", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
+        <h3>Towards Valiya Arikkamala (വലിയ അരിക്കമല ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>02:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Valiya Arikkamala <span class="malayalam">(വലിയ അരിക്കമല)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Direct</td></tr>
+                    <tr><td><strong>06:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Valiya Arikkamala <span class="malayalam">(വലിയ അരിക്കമല)</span></td><td><span class="badge private">SEVEN STAR / സെവൻ സ്റ്റാർ</span></td><td>Kudiyanmala Route</td></tr>
+                    <tr><td><strong>07:10 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Valiya Arikkamala <span class="malayalam">(വലിയ അരിക്കമല)</span></td><td><span class="badge ksrtc">KSRTC</span></td><td>Direct</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // Towards Valiya Arikkamala
-            { from: "Chemperi", to: "Valiya Arikkamala", time: "02:30 PM", name: "KSRTC", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "വലിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Valiya Arikkamala", time: "06:00 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Kudiyanmala Route", fromMl: "ചെമ്പേരി", toMl: "വലിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Valiya Arikkamala", time: "07:10 PM", name: "KSRTC", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "വലിയ അരിക്കമല" },
+        <h3>Towards Cheriya Arikkamala (ചെറിയ അരിക്കമല ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper" style="margin-bottom: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>09:00 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Cheriya Arikkamala <span class="malayalam">(ചെറിയ അരിക്കമല)</span></td><td><span class="badge private">EISWARA / ഐശ്വര്യ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>12:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Cheriya Arikkamala <span class="malayalam">(ചെറിയ അരിക്കമല)</span></td><td><span class="badge private">FAMILY / ഫാമിലി</span></td><td>Direct</td></tr>
+                    <tr><td><strong>02:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Cheriya Arikkamala <span class="malayalam">(ചെറിയ അരിക്കമല)</span></td><td><span class="badge private">KUNNATH / കുന്നത്ത്</span></td><td>Direct</td></tr>
+                    <tr><td><strong>06:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Cheriya Arikkamala <span class="malayalam">(ചെറിയ അരിക്കമല)</span></td><td><span class="badge private">EISWARA / ഐശ്വര്യ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>07:30 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Cheriya Arikkamala <span class="malayalam">(ചെറിയ അരിക്കമല)</span></td><td><span class="badge private">KRITHIKA /  കൃതിക</span></td><td>Direct</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // Towards Cheriya Arikkamala
-            { from: "Chemperi", to: "Cheriya Arikkamala", time: "09:00 AM", name: "EISWARA / ഐശ്വര്യ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Cheriya Arikkamala", time: "12:00 PM", name: "FAMILY / ഫാമിലി", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Cheriya Arikkamala", time: "02:30 PM", name: "KUNNATH / കുന്നത്ത്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Cheriya Arikkamala", time: "06:00 PM", name: "EISWARA / ഐശ്വര്യ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Cheriya Arikkamala", time: "07:30 PM", name: "KRITHIKA /  കൃതിക", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
+        <h3>Towards Ezhupoor (ഏറ്റുപാറ ഭാഗത്തേക്ക്)</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Bus Name</th>
+                        <th>Route / Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>07:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>08:30 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>09:45 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SHREYAS / ശ്രേയസ്</span></td><td>Direct</td></tr>
+                    <tr><td><strong>11:40 AM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>01:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SAGAR / സാഗര</span></td><td>Direct</td></tr>
+                    <tr><td><strong>03:50 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SHREYAS / ശ്രേയസ്</span></td><td>Direct</td></tr>
+                    <tr><td><strong>05:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SALSABIL / സൽസബീൽ</span></td><td>Direct</td></tr>
+                    <tr><td><strong>06:45 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">JANASHATHABDI / ജനശതാബ്ദി</span></td><td>Direct</td></tr>
+                    <tr><td><strong>08:00 PM</strong></td><td>Chemperi <span class="malayalam">(ചെമ്പേരി)</span></td><td>Ezhupoor <span class="malayalam">(ഏറ്റുപാറ)</span></td><td><span class="badge private">SAGAR / സാഗര</span></td><td>Direct</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-            // Towards Ezhupoor
-            { from: "Chemperi", to: "Ezhupoor", time: "07:30 AM", name: "SALSABIL / സൽസബീൽ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "08:30 AM", name: "SALSABIL / സൽസബീൽ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "09:45 AM", name: "SHREYAS / ശ്രേയസ്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "11:40 AM", name: "SALSABIL / സൽസബീൽ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "01:50 PM", name: "SAGAR / സാഗര", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "03:50 PM", name: "SHREYAS / ശ്രേയസ്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "05:00 PM", name: "SALSABIL / സൽസബീൽ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "06:45 PM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
-            { from: "Chemperi", to: "Ezhupoor", time: "08:00 PM", name: "SAGAR / സാഗര", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" }
-        ];
-        const fromSelect = document.getElementById('fromSelect');
-        const toSelect = document.getElementById('toSelect');
-        const busContainer = document.getElementById('busContainer');
-        const resultsCount = document.getElementById('resultsCount');
-        const nextBusBtn = document.getElementById('nextBusBtn');
+    </div>
+</div>
 
-        let showNextBusesOnly = false;
-
-        function setupDropdowns() {
-            const fromStations = new Set();
-            const toDestinations = new Set();
-
-            busDatabase.forEach(item => {
-                fromStations.add(`${item.from}|${item.fromMl}`);
-                toDestinations.add(`${item.to}|${item.toMl}`);
-            });
-
-            Array.from(fromStations).sort().forEach(station => {
-                const [en, ml] = station.split('|');
-                const opt = document.createElement('option');
-                opt.value = en;
-                opt.textContent = `${en} (${ml})`;
-                fromSelect.appendChild(opt);
-            });
-
-            Array.from(toDestinations).sort().forEach(destination => {
-                const [en, ml] = destination.split('|');
-                const opt = document.createElement('option');
-                opt.value = en;
-                opt.textContent = `${en} (${ml})`;
-                toSelect.appendChild(opt);
-            });
-        }
-
-        function toggleNextBusesFilter() {
-            showNextBusesOnly = !showNextBusesOnly;
-            if (showNextBusesOnly) {
-                nextBusBtn.classList.add('active');
-                nextBusBtn.innerHTML = '<span>🔄 Show All Buses (എല്ലാ ബസുകളും കാണിക്കുക)</span>';
-            } else {
-                nextBusBtn.classList.remove('active');
-                nextBusBtn.innerHTML = '<span>⏱️ Ini Ulla Busukal (Next Buses Only)</span>';
-            }
-            filterBuses();
-        }
-
-        function filterBuses() {
-            const selectedFrom = fromSelect.value;
-            const selectedTo = toSelect.value;
-
-            const filtered = busDatabase.filter(bus => {
-                const matchFrom = (selectedFrom === "ALL" || bus.from === selectedFrom);
-                const matchTo = (selectedTo === "ALL" || bus.to === selectedTo);
-                
-                let matchTime = true;
-                if (showNextBusesOnly) {
-                    const now = new Date();
-                    const currentMinutes = (now.getHours() * 60) + now.getMinutes();
-                    
-                    const [timePart, ampm] = bus.time.split(' ');
-                    let [hours, minutes] = timePart.split(':').map(Number);
-                    
-                    if (ampm === 'PM' && hours !== 12) hours += 12;
-                    if (ampm === 'AM' && hours === 12) hours = 0;
-                    
-                    const busMinutes = (hours * 60) + minutes;
-                    matchTime = busMinutes >= currentMinutes;
-                }
-
-                return matchFrom && matchTo && matchTime;
-            });
-
-            resultsCount.textContent = `${filtered.length} Bus services found running`;
-            busContainer.innerHTML = "";
-
-            if (filtered.length === 0) {
-                busContainer.innerHTML = `
-                    <div class="no-results" style="padding: 20px; text-align: center; color: var(--text-muted);">
-                        <p>No upcoming direct buses found for this selection.</p>
-                    </div>`;
-                return;
-            }
-
-            filtered.forEach(bus => {
-                const mapsUrl = `https://www.google.com/maps/dir/${encodeURIComponent(bus.from + ', Kerala')}/${encodeURIComponent(bus.to + ', Kerala')}/`;
-
-                const card = document.createElement('div');
-                card.className = 'bus-card';
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="bus-time">${bus.time}</div>
-                        <a href="${mapsUrl}" target="_blank" class="bus-name" title="Click to view live traffic route on Google Maps">
-                            ${bus.name} 🗺️
-                        </a>
-                    </div>
-                    <div class="route-info">
-                        <span>${bus.from}</span>
-                        <span style="color: var(--text-muted);">➔</span>
-                        <span>${bus.to}</span>
-                    </div>
-                    <div class="via-details">
-                        <span class="malayalam-text">വഴി: ${bus.via}</span>
-                    </div>
-                `;
-                busContainer.appendChild(card);
-            });
-        }
-
-        fromSelect.addEventListener('change', filterBuses);
-        toSelect.addEventListener('change', filterBuses);
-
-        setupDropdowns();
-        filterBuses();
-    </script>
 </body>
 </html>
