@@ -248,6 +248,7 @@
         <h1>Nammadabus.in</h1>
         <p>Comprehensive Master Timetable Portal</p>
     </header>
+
     <main>
         <section class="search-container">
             <div class="form-group">
@@ -278,7 +279,6 @@
     <footer>
         <p>© 2026 Nammadabus.in • Accurate Regional Data Grid</p>
     </footer>
-
     <script>
         const busDatabase = [
             // --- KUTHUPARAMBA / KANNUR TIMINGS ---
@@ -296,27 +296,34 @@
             { from: "Payyavur", to: "Alakode", time: "10:05 AM", name: "THEKKEDATH", via: "ചെമ്പേരി, ആലക്കോട്", fromMl: "പയ്യാവൂർ", toMl: "ആലക്കോട്" },
             { from: "Payyavur", to: "Bandadka", time: "04:20 PM", name: "KSRTC", via: "ആലക്കോട്, ചെറുപുഴ, വെള്ളരിക്കുണ്ട്, രാജപുരം, മാലക്കല്ല് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബന്ധടുക്ക" },
             { from: "Payyavur", to: "Ballal", time: "05:00 PM", name: "KSRTC", via: "ചെമ്പേരി, ആലക്കോട്, വെള്ളരിക്കുണ്ട് വഴി", fromMl: "പയ്യാവൂർ", toMl: "ബലാൽ" },
-            { from: "Payyavur", to: "Josegiri", time: "05:05 PM", name: "THEKKEDATH", via: "ശ്രീകണ്ഠാപുരം, ചെമ്പന്തോട്ടി, നടുവിൽ, ആലക്കോട്, ഉദയഗിരി വഴി", fromMl: "പയ്യാവൂർ", toMl: "ജോസ് ഗിരി" },
+            { from: "Payyavur", to: "Josegiri", time: "05:05 PM", name: "THEKKEDATH", via: "ശ്രീകണ്ഠാപുരം, ചെമ്പന്തോട്ടി, നടുവിൽ, ആലക്കോട്, ਉਦയഗിരി വഴി", fromMl: "പയ്യാവൂർ", toMl: "ജോസ് ഗിരി" },
             { from: "Payyavur", to: "Cherupuzha", time: "05:10 PM", name: "ANAND", via: "പയ്യാവൂരിൽ നിന്നും സ്റ്റാർട്ട് ചെയ്യുന്നു", fromMl: "പയ്യാവൂർ", toMl: "ചെറുപുഴ" },
 
             // --- CHEMPERI MASTER STATION TIMINGS ---
+            // Towards Kannur (കണ്ണൂർ ഭാഗത്തേക്ക് പോകുന്നവ കൃത്യമായി വേർതിരിച്ചു)
+            { from: "Chemperi", to: "Kannur", time: "06:35 AM", name: "SAGAR / സാഗര", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "07:10 AM", name: "FAMILY / ഫാമിലി", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "07:30 AM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "08:00 AM", name: "KRITHIKA / കൃതിക", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "09:45 AM", name: "VISMAYA / വിസ്മയ", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "10:00 AM", name: "MINAKSHI / മീനാക്ഷി", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "10:10 AM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "12:45 PM", name: "FAMILY / ഫാമിലി", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "01:10 PM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "02:00 PM", name: "KRITHIKA / കൃതിക", via: "Eruvatty, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "03:20 PM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "03:45 PM", name: "VISMAYA / വിസ്മയ", via: "Direct Kannur Route", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
+            { from: "Chemperi", to: "Kannur", time: "04:40 PM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "കണ്ണൂർ" },
             { from: "Chemperi", to: "Taliparamba", time: "05:35 AM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "06:35 AM", name: "SAGAR / സാഗര", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "07:00 AM", name: "KSRTC", via: "Oduvally", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "07:00 AM", name: "KSRTC", via: "Irikkur, Thalassery", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "07:10 AM", name: "FAMILY / ഫാമിലി", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "07:30 AM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "07:40 AM", name: "NANDANAM / നന്ദനം", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "08:00 AM", name: "KRITHIKA / കൃതിക", via: "Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "08:00 AM", name: "ANN MARY / അന്ന മേരി", via: "Chempanthotti", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "08:20 AM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "08:30 AM", name: "SALSABIL / സൽസബീൽ", via: "Eruvatty വഴി", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "08:45 AM", name: "NIRANJANA / നിരാഞ്ജന", via: "Chempanthotti, Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "08:50 AM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "09:15 AM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "09:45 AM", name: "VISMAYA / വിസ്മയ", via: "Kannur Route", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "10:00 AM", name: "MINAKSHI / മീനാക്ഷി", via: "Kannur Route", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "10:10 AM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "10:15 AM", name: "PALAKKADANS / പാലക്കാടൻസ്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "10:30 AM", name: "ST JUDE / സെന്റ് ജൂഡ്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "11:10 AM", name: "NANDANAM / നന്ദനം", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
@@ -324,25 +331,21 @@
             { from: "Chemperi", to: "Taliparamba", time: "11:40 AM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "12:00 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "12:20 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:40 PM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "12:45 PM", name: "FAMILY / ഫാമിലി", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "01:10 PM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Kannur Route", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "02:00 PM", name: "KRITHIKA / കൃതിക", via: "Eruvatty, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
+            { from: "Chemperi", to: "Taliparamba", time: "12:40 PM", name: "JJ / ജൈజൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "02:10 PM", name: "MINAKSHI / മീനാക്ഷി", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "02:50 PM", name: "EISWARA / ഐശ്വര്യ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "03:15 PM", name: "SAGAR / സാഗര", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "03:20 PM", name: "KUNNATH / കുന്നത്ത്", via: "Sreekandapuram, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "03:45 PM", name: "VISMAYA / വിസ്മയ", via: "Kannur Route", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "04:00 PM", name: "KSRTC", via: "Oduvally", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "04:15 PM", name: "JJ / ജൈജൈ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "04:30 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
-            { from: "Chemperi", to: "Taliparamba", time: "04:40 PM", name: "SHREYAS / ശ്രേയസ്", via: "Irikkur, Kannur", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "05:05 PM", name: "MANGALATHIL / മംഗലാട്ടിൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "05:10 PM", name: "NIRANJANA / നിരാഞ്ജന", via: "Chempanthotti", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "05:15 PM", name: "PILAKUNNUMMAL / പിലാക്കുന്നമ്മൽ", via: "Sreekandapuram, Malappattam", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "05:50 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Ernakulam - Chala", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "06:20 PM", name: "SALSABIL / സൽസബീൽ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
             { from: "Chemperi", to: "Taliparamba", time: "06:40 PM", name: "EISWARA / ഐശ്വര്യ", via: "Sreekandapuram", fromMl: "ചെമ്പേരി", toMl: "തളിപ്പറമ്പ്" },
+
+            // Towards Iritty (ഇരിട്ടി ഭാഗത്തേക്ക്)
             { from: "Chemperi", to: "Iritty", time: "05:25 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "05:50 AM", name: "KSRTC", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "06:30 AM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
@@ -369,7 +372,7 @@
             { from: "Chemperi", to: "Iritty", time: "03:00 PM", name: "KSRTC", via: "Mananthavady Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "03:30 PM", name: "PROVIDENCE / പ്രൊവിഡൻസ്", via: "Thalassery Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "03:45 PM", name: "SANIYA / സാനിയ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
-            { from: "Chemperi", to: "Iritty", time: "04:10 PM", name: "HOLY ANGEL / ഹോളി എയ്ഞ്ചൽ", via: "Kizhupally വഴി", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
+            { from: "Chemperi", to: "Iritty", time: "04:10 PM", name: "HOLY ANGEL / Holi Angel", via: "Kizhupally വഴി", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "04:30 PM", name: "AVE MARIA / ആവേ മരിയ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "04:40 PM", name: "ANAND / ആനന്ദ്", via: "Payyavur Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "05:00 PM", name: "ST JUDE / സെന്റ് ജൂഡ്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
@@ -381,14 +384,14 @@
             { from: "Chemperi", to: "Iritty", time: "08:10 PM", name: "MADHAVI / മാധവി", via: "Ernakulam Route", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
             { from: "Chemperi", to: "Iritty", time: "09:00 PM", name: "KSRTC", via: "Vaniyappara", fromMl: "ചെമ്പേരി", toMl: "ഇരിട്ടി" },
 
-            // Towards Alakode
+            // Towards Alakode (ആലക്കോട് ഭാഗത്തേക്ക്)
             { from: "Chemperi", to: "Alakode", time: "04:00 AM", name: "KSRTC", via: "Payyannur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "04:30 AM", name: "KSRTC", via: "Payyannur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "06:30 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "06:50 AM", name: "KSRTC", via: "Mangalapuram Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "07:30 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "08:05 AM", name: "IPC / ഐ പി സി", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "08:20 AM", name: "HOLY ANGEL / ഹോളി എയ്ഞ്ചൽ", via: "Kudiyanmala, Alakode", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
+            { from: "Chemperi", to: "Alakode", time: "08:20 AM", name: "HOLY ANGEL / Holi Angel", via: "Kudiyanmala, Alakode", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "09:10 AM", name: "THEKKEDATH / തെക്കേടത്ത്", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "09:44 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "10:10 AM", name: "BIGSHOW / ബിഗ്ഷോ", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
@@ -396,7 +399,7 @@
             { from: "Chemperi", to: "Alakode", time: "11:00 AM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "11:45 AM", name: "KSRTC", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "12:40 PM", name: "ANAND / ആനന്ദ്", via: "Cherupuzha Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Alakode", time: "01:15 PM", name: "JACOBS / ಜേക്കബ്", via: "Cherupuzha, Vellarikundu", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
+            { from: "Chemperi", to: "Alakode", time: "01:15 PM", name: "JACOBS / ജേക്കബ്", via: "Cherupuzha, Vellarikundu", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "01:40 PM", name: "ST MARYS / സെന്റ് മേരീസ്", via: "Panathur Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "02:15 PM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "02:55 PM", name: "ST MARYS / സെന്റ് മേരീസ്", via: "Vellarikundu Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
@@ -409,7 +412,7 @@
             { from: "Chemperi", to: "Alakode", time: "05:50 PM", name: "KSRTC", via: "Vellarikundu Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "06:30 PM", name: "HOLY ANGEL /  ഹോളി എയ്ഞ്ചൽ", via: "Alakode Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
             { from: "Chemperi", to: "Alakode", time: "06:40 PM", name: "KSRTC", via: "Kanhangad Route", fromMl: "ചെമ്പേരി", toMl: "ആലക്കോട്" },
-            { from: "Chemperi", to: "Kudiyanmala", time: "08:20 AM", name: "HOLY ANGEL / ഹോളി എയ്ഞ്ചൽ", via: "Alakode Route", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
+            { from: "Chemperi", to: "Kudiyanmala", time: "08:20 AM", name: "HOLY ANGEL / Holi Angel", via: "Alakode Route", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
             { from: "Chemperi", to: "Kudiyanmala", time: "08:50 AM", name: "KERALA / കേരള", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
             { from: "Chemperi", to: "Kudiyanmala", time: "11:05 AM", name: "CHAITHRAM / ചൈത്രം", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
             { from: "Chemperi", to: "Kudiyanmala", time: "12:30 PM", name: "SEVEN STAR / സെവൻ സ്റ്റാർ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "കൂടിയാൻമല" },
@@ -431,7 +434,7 @@
             { from: "Chemperi", to: "Cheriya Arikkamala", time: "12:00 PM", name: "FAMILY / ഫാമിലി", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
             { from: "Chemperi", to: "Cheriya Arikkamala", time: "02:30 PM", name: "KUNNATH / കുന്നത്ത്", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
             { from: "Chemperi", to: "Cheriya Arikkamala", time: "06:00 PM", name: "EISWARA / ഐശ്വര്യ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
-            { from: "Chemperi", to: "Cheriya Arikkamala", time: "07:30 PM", name: "KRITHIKA / കൃതിക", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
+            { from: "Chemperi", to: "Cheriya Arikkamala", time: "07:30 PM", name: "KRITHIKA /  കൃതിക", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ചെറിയ അരിക്കമല" },
 
             // Towards Ezhupoor
             { from: "Chemperi", to: "Ezhupoor", time: "07:30 AM", name: "SALSABIL / സൽസബീൽ", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
@@ -444,8 +447,6 @@
             { from: "Chemperi", to: "Ezhupoor", time: "06:45 PM", name: "JANASHATHABDI / ജനശതാബ്ദി", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" },
             { from: "Chemperi", to: "Ezhupoor", time: "08:00 PM", name: "SAGAR / സാഗര", via: "Direct", fromMl: "ചെമ്പേരി", toMl: "ഏറ്റുപാറ" }
         ];
-
-        // --- FILTER ENGINE LOGIC ---
         const fromSelect = document.getElementById('fromSelect');
         const toSelect = document.getElementById('toSelect');
         const busContainer = document.getElementById('busContainer');
@@ -491,6 +492,7 @@
             }
             filterBuses();
         }
+
         function filterBuses() {
             const selectedFrom = fromSelect.value;
             const selectedTo = toSelect.value;
@@ -529,7 +531,7 @@
             }
 
             filtered.forEach(bus => {
-                const mapsUrl = bus.googleMapsLink || "https://www.google.com/maps/dir/" + encodeURIComponent(bus.from + ', Kerala') + "/" + encodeURIComponent(bus.to + ', Kerala') + "/";
+                const mapsUrl = `https://www.google.com/maps/dir/${encodeURIComponent(bus.from + ', Kerala')}/${encodeURIComponent(bus.to + ', Kerala')}/`;
 
                 const card = document.createElement('div');
                 card.className = 'bus-card';
